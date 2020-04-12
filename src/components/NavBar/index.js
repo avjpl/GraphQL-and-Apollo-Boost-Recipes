@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { SessionContext } from '../Contexts/Session';
+import SignOut from '../Auth/SignOut';
 
 const UnAuth = () => (
   <ul>
@@ -41,7 +42,9 @@ const Auth = ({ username }) => (
       <li>
         <NavLink to='/profile'>Profile</NavLink>
       </li>
-      <li><button>Signout</button></li>
+      <li>
+        <SignOut />
+      </li>
     </ul>
     <h4>{`Welcome back ${username}`}</h4>
   </>

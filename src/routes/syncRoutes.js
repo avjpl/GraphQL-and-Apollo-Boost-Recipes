@@ -4,6 +4,7 @@ import AddRecipe from '../components/Recipe/AddRecipe';
 import Profile from '../components/Profile';
 import SignUp from '../components/Auth/SignUp';
 import SignIn from '../components/Auth/SignIn';
+import SignOut from '../components/Auth/SignOut';
 
 export const routes = [
   {
@@ -34,6 +35,11 @@ export const routes = [
   {
     component: SignIn,
     path: '/signin',
+    exact: true,
+  },
+  {
+    component: SignOut,
+    path: '/signout',
     exact: true,
   },
 ];

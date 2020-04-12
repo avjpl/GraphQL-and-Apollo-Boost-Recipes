@@ -1,11 +1,11 @@
-export const home = watch => {
+export const home = (watch, fn) => {
 
-  if (!fn in []) throw new Error('Invalid array function');
+  if (fn && !fn in []) throw new Error('Invalid array function');
 
   return {
     watch,
     redirect: '/',
     cb: v => Boolean(v),
-    fn: 'some'
+    fn
   }
 };

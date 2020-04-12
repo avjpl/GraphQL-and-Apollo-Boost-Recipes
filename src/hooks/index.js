@@ -52,8 +52,12 @@ export const useRedirect = (config) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (config.watch[config.fn](config.cb)) {
+    if (config.watch[config.fn] && config.watch[config.fn](config.cb)) {
       history.push(config.redirect);
     }
-  }, config.watch);
+
+    if (!config.watch[config.fn]) {
+      config.redirect && history.push(config.redirect);
+    }
+  }, [...config.watch]);
 };

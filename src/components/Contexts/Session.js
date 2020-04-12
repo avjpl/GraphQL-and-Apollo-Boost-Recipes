@@ -8,6 +8,8 @@ export const SessionContext = createContext();
 const SessionContextProvider = ({ children }) => {
   const { loading, error, data, refetch } = useQuery(GET_CURRENT_USER);
 
+  console.log(data);
+
   return (
     <SessionContext.Provider value={{ refetch, error, loading, ...data }}>
       { children }

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import Error from '../Error';
 import { home } from '../../redirects';
 import { SIGNUP_USER } from '../../queries';
 import { SessionContext } from '../Contexts/Session';
-import { useHandleSubmit, useFormFields } from '../../hooks';
+import { useHandleSubmit, useFormFields, useRedirect } from '../../hooks';
 
 const validate = (fields) => {
   const { username, email, password, passwordConfirmation } = fields;
@@ -17,7 +17,7 @@ const SignUp = () => {
   const { getCurrentUser } = useContext(SessionContext);
   const [fields, handleFieldChange] = useFormFields();
   const [signup, { loading, error, data }] = useHandleSubmit(fields, SIGNUP_USER);
-  useRedirect(home([data, getCurrentUser]));
+  useRedirect(home([data, getCurrentUser], 'some'));
 
   const valid = validate(fields);
 

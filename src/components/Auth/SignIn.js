@@ -17,7 +17,7 @@ const SignIn = () => {
   const { getCurrentUser } = useContext(SessionContext);
   const [fields, handleFieldChange] = useFormFields();
   const [signin, { loading, error, data }] = useHandleSubmit(fields, SIGNIN_USER);
-  useRedirect(home([data, getCurrentUser]));
+  useRedirect(home([data, getCurrentUser], 'some'));
 
   const valid = validate(fields);
 
