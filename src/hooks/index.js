@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 
 const defaultState = {
   username: '',
@@ -45,4 +46,14 @@ export const useFormFields = () => {
       setValues({ ...fields, [name]: value });
     }
   ];
+};
+
+export const useRedirect = (config) => {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (config.watch[config.fn](config.cb)) {
+      history.push(config.redirect);
+    }
+  }, config.watch);
 };

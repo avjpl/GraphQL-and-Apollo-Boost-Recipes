@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
 
 import Error from '../Error';
+import { home } from '../../redirects';
 import { SIGNIN_USER } from '../../queries';
 import { SessionContext } from '../Contexts/Session';
-import { useHandleSubmit, useFormFields } from '../../hooks';
+import { useHandleSubmit, useFormFields, useRedirect } from '../../hooks';
 
 const validate = (fields) => {
   const { username, password } = fields;
@@ -14,16 +14,10 @@ const validate = (fields) => {
 };
 
 const SignIn = () => {
-  const history = useHistory();
   const { getCurrentUser } = useContext(SessionContext);
   const [fields, handleFieldChange] = useFormFields();
   const [signin, { loading, error, data }] = useHandleSubmit(fields, SIGNIN_USER);
-
-  useEffect(() => {
-    if (data || getCurrentUser) {
-      history.push('/');
-    }
-  });
+  useRedirect(home([data, getCurrentUser]));
 
   const valid = validate(fields);
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Error from '../Error';
+import { home } from '../../redirects';
 import { SIGNUP_USER } from '../../queries';
 import { SessionContext } from '../Contexts/Session';
 import { useHandleSubmit, useFormFields } from '../../hooks';
@@ -14,16 +14,10 @@ const validate = (fields) => {
 };
 
 const SignUp = () => {
-  const history = useHistory();
   const { getCurrentUser } = useContext(SessionContext);
   const [fields, handleFieldChange] = useFormFields();
   const [signup, { loading, error, data }] = useHandleSubmit(fields, SIGNUP_USER);
-
-  useEffect(() => {
-    if (data || getCurrentUser) {
-      history.push('/');
-    }
-  });
+  useRedirect(home([data, getCurrentUser]));
 
   const valid = validate(fields);
 

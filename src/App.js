@@ -9,11 +9,12 @@ import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
 import { onError } from "apollo-link-error";
 
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 
 import { routes } from './routes/syncRoutes';
 import SessionContextProvider from './components/Contexts/Session';
+import Navbar from './components/NavBar';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -58,19 +59,7 @@ const App = () => (
     <SessionContextProvider>
       <Router>
         <Fragment>
-          <nav>
-            <ul>
-              <li>
-                <Link to='/'>Home</Link>
-              </li>
-              <li>
-                <Link to='/signup'>Sign Up</Link>
-              </li>
-              <li>
-                <Link to='/signin'>Sign In</Link>
-              </li>
-            </ul>
-          </nav>
+          <Navbar />
 
           {renderRoutes(routes)}
         </Fragment>
