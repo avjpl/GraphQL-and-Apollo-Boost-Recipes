@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 require('dotenv').config();
@@ -40,6 +41,7 @@ mongoose.connect(
 
 const PORT = process.env.port || 4000;
 const app = express();
+
 const corsOptopns = {
   origin: 'http://localhost:3900',
   credentials: true
@@ -49,9 +51,23 @@ app.use(cors(corsOptopns));
 
 const server = new ApolloServer({
   schema,
-  context: {
-    Recipe,
-    User
+  context: async ({ req }) => {
+    const token = req.headers.authorization || '';
+    let currentUser;
+
+    if (token) {
+      try {
+        currentUser = await jwt.verify(token, process.env.SECRET);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    return {
+      Recipe,
+      User,
+      currentUser
+    };
   }
 });
 server.applyMiddleware({ app });

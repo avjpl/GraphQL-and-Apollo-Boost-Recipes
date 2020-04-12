@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 
-import { SIGNUP_USER } from '../queries';
-
 const defaultState = {
   username: '',
   email: '',
@@ -10,8 +8,13 @@ const defaultState = {
   passwordConfirmation: ''
 };
 
-export const useHandleSubmit = (fields) => {
-  const [signup, { data, loading, error }] = useMutation(SIGNUP_USER);
+export const useHandleSubmit = (fields, query) => {
+  const [signup, { data, loading, error }] = useMutation(query);
+
+  if (data) {
+    const { token } = data['signupUser'] || data['signinUser'];
+    localStorage.setItem('token', token);
+  }
 
   return [
     (evt) => {
@@ -23,9 +26,11 @@ export const useHandleSubmit = (fields) => {
         fields[field] = '';
       });
     },
-    data,
-    loading,
-    error
+    {
+      data,
+      loading,
+      error
+    }
   ];
 };
 

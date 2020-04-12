@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const createToken = (user, secret, expiresIn) => {
   const { username, email } = user;
@@ -19,7 +20,20 @@ module.exports.resolvers = {
       const allRecipes = await Recipe.find();
 
       return allRecipes;
-    }
+    },
+    getCurrentUser: async (_, __, { User, currentUser }) => {
+      if (!currentUser) {
+        return null;
+      }
+
+      const user = await User.findOne({ username: currentUser.username })
+        .populate({
+          path: 'favorites',
+          model: 'Recipe'
+        });
+
+      return user;
+    },
   },
 
   Mutation: {
@@ -33,6 +47,24 @@ module.exports.resolvers = {
       }).save();
 
       return newRecipe;
+    },
+
+    signinUser: async (_, { username, password }, { User }) => {
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword) {
+        throw new Error('Invalid password');
+      }
+
+      return {
+        token: createToken(user, process.env.SECRET, '1hr')
+      }
     },
 
     signupUser: async (_, { username, email, password }, { User }) => {
@@ -49,7 +81,7 @@ module.exports.resolvers = {
       }).save();
 
       return {
-        token: createToken(newUser, process.env.SECRET, '1hr')
+        token: createToken(newUser, process.env.SECRET, '2hr')
       }
     },
   }
